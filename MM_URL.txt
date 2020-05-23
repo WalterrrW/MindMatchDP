@@ -1,0 +1,27 @@
+URL MINDMATCH:
+http://127.0.0.1:8000/question/ - GET   return a list of all questions and answers possible
+http://127.0.0.1:8000/question/1/ - GET  return a single question with answers for primary key 1
+
+http://127.0.0.1:8000/profile/ - GET  return a list of all profiles
+http://127.0.0.1:8000/profile/3/ - GET  return the user profile for user profile with primary key 3
+http://127.0.0.1:8000/profile/new/ - POST a Json to create a new profile
+
+http://127.0.0.1:8000/cnp/ - GET  return a list of all user-cnp database
+http://127.0.0.1:8000/cnp/2 - GET a user-cnp Json
+http://127.0.0.1:8000/cnp/new - POST Json create a new user-cnp 
+
+ToDo:
+Initial:
+	- login/register
+	- answer questions
+	- send/ store cnp
+	- set profile (description so on)
+
+Further:
+	- MIND MATCH - algo to find closest friends (ex 25)
+	- option 1: send all 25 profiles to front-end as a list of Json objects
+	- option 2: send just one by one, as the user request another profile
+
+Final: 
+	- open chat between 2 users:
+	- maybe video streaming between those
