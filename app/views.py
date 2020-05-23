@@ -123,3 +123,24 @@ def one_questions_and_answers(request, pk):
         serializer = QuestionsDBSerializer(questions_answers)
         return JsonResponse(serializer.data)
     return HttpResponse(status=404)
+
+# @csrf_exempt
+# def matching(request, pk):
+#     matched_list_ = get_matching_users_profile(pk, UserPersonalityDB.objects.filter(userid=pk))
+
+# def get_matching_users_profile(pk, cnp):
+#
+#     personality_list = UserPersonalityDB.object.all()
+#     personality_list = [x for x in enumerate(personality_list) if x.userid != pk]
+#
+#     final_order = []
+#     for x in enumerate(personality_list):
+#         if x.userid != pk:
+#             procent_matched = x.userid +75
+#             final_order.append((x.userid, procent_matched))
+#     print(final_order)
+
+
+
+
+
