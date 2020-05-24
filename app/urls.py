@@ -15,7 +15,7 @@ urlpatterns = [
     path('question/', views.questions__and_answers, name='question'),
     path('question/<int:pk>/', views.one_questions_and_answers, name='question'),
 
-    # path('match/<int:pk>/', views.matching, name='matching'),
+    path('match/<int:pk>/', views.matching, name='matching'),
 
     path('about/', views.about, name='html-about'),
 ]

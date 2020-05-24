@@ -124,23 +124,42 @@ def one_questions_and_answers(request, pk):
         return JsonResponse(serializer.data)
     return HttpResponse(status=404)
 
-# @csrf_exempt
-# def matching(request, pk):
-#     matched_list_ = get_matching_users_profile(pk, UserPersonalityDB.objects.filter(userid=pk))
+@csrf_exempt
+def matching(request, pk):
+    if request.method == 'GET':
+        matched_list = get_matching_users_profile(pk, UserPersonalityDB.objects.filter(userid=pk).first().cnp)
+        matched_list = get_matching_profiles(matched_list)
+        print(matched_list)
+        serializer = UserProfileDBSerializer(matched_list, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    return HttpResponse(status=404)
 
-# def get_matching_users_profile(pk, cnp):
-#
-#     personality_list = UserPersonalityDB.object.all()
-#     personality_list = [x for x in enumerate(personality_list) if x.userid != pk]
-#
-#     final_order = []
-#     for x in enumerate(personality_list):
-#         if x.userid != pk:
-#             procent_matched = x.userid +75
-#             final_order.append((x.userid, procent_matched))
-#     print(final_order)
+def get_matching_users_profile(pk, cnp):
+
+    personality_list = UserPersonalityDB.objects.all()
+    final_order = []
+    for x in personality_list:
+        # print(pk)
+        # print(x.userid.id)
+        if x.userid.id != pk:
+            #---------------implement algo
+            procent_matched = x.userid.id + 75
+            #---------------- implement algo
+            final_order.append((x.userid.id, procent_matched))
+    final_order = sorted(final_order, key=lambda x: -x[1])
+    print(final_order)
+    return  final_order
 
 
+def get_matching_profiles(matched_list):
+    matched_profiles =[]
+    user_profiles = UserProfileDB.objects.all()
+
+    for x in matched_list:
+        profile = user_profiles.filter(userid=x[0]).first()
+        print(profile)
+        matched_profiles.append(profile)
+    return matched_profiles
 
 
 
