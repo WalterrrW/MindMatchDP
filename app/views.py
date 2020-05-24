@@ -1,10 +1,5 @@
-from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
-
 from .models import UserProfileDB, UserPersonalityDB, QuestionsDB
-from .serializers import UserProfileDBSerializer, GroupSerializer, UserSerializer
+from .serializers import UserProfileDBSerializer, GroupSerializer, UserSerializer, UserPersonalityDBSerializer, QuestionsDBSerializer
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, permissions
 
@@ -21,4 +16,10 @@ class UserProfileDBViewSet(viewsets.ModelViewSet):
     queryset = UserProfileDB.objects.all()
     serializer_class = UserProfileDBSerializer
 
+class UserPersonalityDBViewSet(viewsets.ModelViewSet):
+    queryset = UserPersonalityDB.objects.all()
+    serializer_class = UserPersonalityDBSerializer
 
+class QuestionsDBViewSet(viewsets.ModelViewSet):
+    queryset = QuestionsDB.objects.all()
+    serializer_class = QuestionsDBSerializer

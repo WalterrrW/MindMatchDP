@@ -6,14 +6,12 @@ from pygments import highlight
 
 
 class UserProfileDB(models.Model):
-    userid = models.ForeignKey('auth.User',related_name = 'userProfile' ,on_delete=models.CASCADE)
+    userid = models.ForeignKey(User,related_name = 'userProfile' ,on_delete=models.CASCADE)
     description = models.TextField()
     random_fun = models.TextField()
 
     def __str__(self):
-        return f"{self.user} - {self.description} - {self.random_fun}"
-
-
+        return f"{self.userid} - {self.description} - {self.random_fun}"
 
 
 class UserPersonalityDB(models.Model):

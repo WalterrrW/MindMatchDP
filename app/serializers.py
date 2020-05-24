@@ -31,3 +31,22 @@ class UserProfileDBSerializer(serializers.HyperlinkedModelSerializer):
             'description',
             'random_fun'
         ]
+
+class UserPersonalityDBSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = UserPersonalityDB
+        fields = [
+            'userid',
+            'cnp'
+        ]
+
+
+class QuestionsDBSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = QuestionsDB
+        fields = [
+            'question',
+            'asnwer_a',
+            'asnwer_b',
+            'asnwer_c'
+        ]
