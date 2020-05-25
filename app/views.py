@@ -6,12 +6,14 @@ from rest_framework.parsers import JSONParser
 from .models import UserProfileDB, UserPersonalityDB, QuestionsDB
 from .serializers import UserProfileDBSerializer, UserPersonalityDBSerializer, QuestionsDBSerializer
 
+
 def home(request):
     return render(request, 'html/home.html')
 
 
 def about(request):
     return render(request, 'html/about.html', {'title': 'About'})
+
 
 @csrf_exempt
 def get_users_profiles(request):
@@ -23,6 +25,7 @@ def get_users_profiles(request):
         serializer = UserProfileDBSerializer(userProfiles, many=True)
         return JsonResponse(serializer.data, safe=False)
     return HttpResponse(status=404)
+
 
 @csrf_exempt
 def add_user_profile(request):
@@ -59,8 +62,6 @@ def get_one_user_profile(request, pk):
         return JsonResponse(serializer.errors, status=400)
 
 
-
-
 @csrf_exempt
 def all_cnps(request):
     """
@@ -70,6 +71,7 @@ def all_cnps(request):
         userCNP = UserPersonalityDB.objects.all()
         serializer = UserPersonalityDBSerializer(userCNP, many=True)
         return JsonResponse(serializer.data, safe=False)
+
 
 @csrf_exempt
 def get_user_cnp(request, pk):
@@ -85,6 +87,7 @@ def get_user_cnp(request, pk):
     if request.method == 'GET':
         serializer = UserPersonalityDBSerializer(userCNP, many=True)
         return JsonResponse(serializer.data, safe=False)
+
 
 @csrf_exempt
 def add_new_user_cnp(request):
@@ -124,6 +127,7 @@ def one_questions_and_answers(request, pk):
         return JsonResponse(serializer.data)
     return HttpResponse(status=404)
 
+
 @csrf_exempt
 def matching(request, pk):
     if request.method == 'GET':
@@ -134,25 +138,27 @@ def matching(request, pk):
         return JsonResponse(serializer.data, safe=False)
     return HttpResponse(status=404)
 
-def get_matching_users_profile(pk, cnp):
 
+def get_matching_users_profile(pk, cnp):
     personality_list = UserPersonalityDB.objects.all()
     final_order = []
     for x in personality_list:
         # print(pk)
         # print(x.userid.id)
         if x.userid.id != pk:
-            #---------------implement algo
-            procent_matched = x.userid.id + 75
-            #---------------- implement algo
+            # ---------------implement algo
+            # procent_matched = x.userid.id + 75
+            procent_matched = get_procent_matched(cnp, x.cnp)
+            # print(procent_matched)
+            # ---------------- implement algo
             final_order.append((x.userid.id, procent_matched))
     final_order = sorted(final_order, key=lambda x: -x[1])
     print(final_order)
-    return  final_order
+    return final_order
 
 
 def get_matching_profiles(matched_list):
-    matched_profiles =[]
+    matched_profiles = []
     user_profiles = UserProfileDB.objects.all()
 
     for x in matched_list:
@@ -162,4 +168,15 @@ def get_matching_profiles(matched_list):
     return matched_profiles
 
 
+def get_procent_matched(own_cnp, foreign_cnp):
+    own_cnp_list = list(own_cnp)
+    foreign_cnp_list = list(foreign_cnp)
+    # print(own_cnp_list)
+    # print(foreign_cnp_list)
+    score = 0
 
+    for x in range(0, len(own_cnp_list)):
+        if (own_cnp_list[x] == foreign_cnp_list[x]):
+            score += 20
+
+    return score
