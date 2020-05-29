@@ -1,8 +1,12 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
 
 urlpatterns = [
-    path('', views.home, name='html-home'),
+    path('', include(router.urls)),
 
     path('profile/', views.get_users_profiles, name='get_users_profiles'),
     path('profile/new/', views.add_user_profile, name='add_user_profile'),

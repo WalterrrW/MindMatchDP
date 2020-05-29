@@ -1,6 +1,14 @@
 from rest_framework import serializers
 from .models import UserProfileDB, UserPersonalityDB, QuestionsDB
+from django.contrib.auth.models import User
 
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'email'
+        ]
 
 class UserProfileDBSerializer(serializers.ModelSerializer):
     class Meta:

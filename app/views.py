@@ -4,7 +4,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from rest_framework.parsers import JSONParser
 from .models import UserProfileDB, UserPersonalityDB, QuestionsDB
-from .serializers import UserProfileDBSerializer, UserPersonalityDBSerializer, QuestionsDBSerializer
+from .serializers import UserProfileDBSerializer, UserPersonalityDBSerializer, QuestionsDBSerializer, UserSerializer
+from rest_framework import viewsets, permissions
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 def home(request):
