@@ -1,6 +1,6 @@
 # MindMatchDP
  
-# Versiunea functionala e ultimul commit de pe branch-ul development
+# Versiunea functionala e ultimul commit de pe branch-ul development sau master
  
 Run: & pip install -r requirements.txt
 
