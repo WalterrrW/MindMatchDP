@@ -28,7 +28,16 @@ The urls are:
 	localhost:8000/question - accepts get request and returns all the questions with their answers
 	localhost:8000/question/<int:pk>/ - accepts get request and returns one question with it's answer
 	localhost:8000/match/<int:pk>/ - accepts get request and returns the mathcing user profiles in the compatibility order
-
+	
+	localhost:8000/rest-auth/login/ (POST)
+	/rest-auth/logout/ (POST)
+    /rest-auth/password/reset/ (POST)
+    /rest-auth/password/reset/confirm/ (POST)
+    /rest-auth/password/change/ (POST)
+    /rest-auth/user/ (GET, PUT, PATCH)
+    /rest-auth/registration/ (POST)
+    /rest-auth/registration/verify-email/ (POST)
+    
 pentru a adauga intrebari in backend, run:
 	$ python manage.py createsuperuser
 	create a user for you

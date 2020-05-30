@@ -6,6 +6,8 @@ from rest_framework.parsers import JSONParser
 from .models import UserProfileDB, UserPersonalityDB, QuestionsDB
 from .serializers import UserProfileDBSerializer, UserPersonalityDBSerializer, QuestionsDBSerializer, UserSerializer
 from rest_framework import viewsets, permissions
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -20,7 +22,9 @@ def about(request):
     return render(request, 'html/about.html', {'title': 'About'})
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['GET'])
+@permission_classes((permissions.IsAuthenticated,))
 def get_users_profiles(request):
     """
         List all user profiles, or create a new user profile.
@@ -32,7 +36,9 @@ def get_users_profiles(request):
     return HttpResponse(status=404)
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['POST'])
+@permission_classes((permissions.IsAuthenticated,))
 def add_user_profile(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
@@ -44,7 +50,9 @@ def add_user_profile(request):
     return HttpResponse(status=404)
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['GET','PUT'])
+@permission_classes((permissions.IsAuthenticated,))
 def get_one_user_profile(request, pk):
     """
     Retrieve, update or delete a user profile.
@@ -67,7 +75,9 @@ def get_one_user_profile(request, pk):
         return JsonResponse(serializer.errors, status=400)
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['GET'])
+@permission_classes((permissions.IsAuthenticated,))
 def all_cnps(request):
     """
         List all user profiles, or create a new user profile.
@@ -78,7 +88,9 @@ def all_cnps(request):
         return JsonResponse(serializer.data, safe=False)
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['GET'])
+@permission_classes((permissions.IsAuthenticated,))
 def get_user_cnp(request, pk):
     """
         List all user profiles, or create a new user profile.
@@ -94,7 +106,9 @@ def get_user_cnp(request, pk):
         return JsonResponse(serializer.data, safe=False)
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['POST'])
+@permission_classes((permissions.IsAuthenticated,))
 def add_new_user_cnp(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
@@ -105,7 +119,9 @@ def add_new_user_cnp(request):
         return JsonResponse(serializer.errors, status=400)
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['GET'])
+@permission_classes((permissions.IsAuthenticated,))
 def questions__and_answers(request):
     """
         List all user profiles, or create a new user profile.
@@ -117,7 +133,9 @@ def questions__and_answers(request):
     return HttpResponse(status=404)
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['GET'])
+@permission_classes((permissions.IsAuthenticated,))
 def one_questions_and_answers(request, pk):
     """
     Retrieve, update or delete a user profile.
@@ -133,7 +151,9 @@ def one_questions_and_answers(request, pk):
     return HttpResponse(status=404)
 
 
-@csrf_exempt
+# @csrf_exempt
+@api_view(['GET'])
+@permission_classes((permissions.IsAuthenticated,))
 def matching(request, pk):
     if request.method == 'GET':
         matched_list = get_matching_users_profile(pk, UserPersonalityDB.objects.filter(userid=pk).first().cnp)
