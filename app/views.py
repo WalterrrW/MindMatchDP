@@ -120,7 +120,7 @@ def add_new_user_cnp(request):
 
 
 # @csrf_exempt
-@api_view(['GET'])
+# @api_view(['GET'])
 @permission_classes((permissions.IsAuthenticated,))
 def questions__and_answers(request):
     """
