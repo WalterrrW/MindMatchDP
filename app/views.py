@@ -39,11 +39,11 @@ def add_user(request):
 def login_user(request):
     if request.method == 'POST':
         data = JSONParser().parse(request)
-        if User.objects.filter(username=data['username']).filter(password=data['password']).exists():
-            data['id']=re.findall(r'\d+',str(User.objects.filter(username=data['username']).filter(password=data['password']).values('id')))[0]
-            return JsonResponse(data, status=201, safe=False)
-        else:
-            return HttpResponse(status=403)
+        # if User.objects.filter(username=data['username']).filter(password=data['password']).exists():
+        data['id']=re.findall(r'\d+',str(User.objects.filter(username=data['username']).filter(password=data['password']).values('id')))[0]
+        return JsonResponse(data, status=201, safe=False)
+        # else:
+        # return HttpResponse(status=403)
     return HttpResponse(status=404)
     # if request.method == 'POST':
     #     data = JSONParser().parse(request)
