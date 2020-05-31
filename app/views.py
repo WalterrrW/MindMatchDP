@@ -7,9 +7,43 @@ from .models import UserProfileDB, UserPersonalityDB, QuestionsDB
 from .serializers import UserProfileDBSerializer, UserPersonalityDBSerializer, QuestionsDBSerializer, UserSerializer
 from rest_framework import viewsets, permissions
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+
+@csrf_exempt
+def get_users(request):
+    if request.method == 'GET':
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    return HttpResponse(status=404)
+
+@csrf_exempt
+def add_user(request):
+    if request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = UserSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
+    return HttpResponse(status=404)
+
+@csrf_exempt
+def login_user(request):
+    if request.method == 'GET':
+        data = JSONParser().parse(request)
+        if User.objects.filter(username=data['username']).filter(password=data['password']).exists():
+            qs = User.objects.filter(username=data['username']).filter(password=data['password']).values('id')
+            serialized_qs = json.dumps(list(qs), cls=DjangoJSONEncoder)
+            return JsonResponse(serialized_qs,safe=False)
+        else:
+            return HttpResponse(status=403)
+    return HttpResponse("GET requests only!")
 
 
 def home(request):
