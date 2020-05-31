@@ -4,11 +4,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 from rest_framework.parsers import JSONParser
 from .models import UserProfileDB, UserPersonalityDB, QuestionsDB
-from .serializers import UserProfileDBSerializer, UserPersonalityDBSerializer, QuestionsDBSerializer, UserSerializer
+from .serializers import UserProfileDBSerializer, UserPersonalityDBSerializer, QuestionsDBSerializer, UserSerializer, UserSerializerOnlyId
 from rest_framework import viewsets, permissions
 
 import json
 from django.core.serializers.json import DjangoJSONEncoder
+import re
 
 # class UserViewSet(viewsets.ModelViewSet):
 #     queryset = User.objects.all()
@@ -29,22 +30,30 @@ def add_user(request):
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        #return JsonResponse(serializer.errors, status=400)
-        return HttpResponse(status=404)
+            return JsonResponse(serializer.data, status=201, safe=False)
+        return JsonResponse(serializer.errors, status=400)
+        #return HttpResponse(status=404)
     return HttpResponse(status=404)
 
 @csrf_exempt
 def login_user(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         data = JSONParser().parse(request)
         if User.objects.filter(username=data['username']).filter(password=data['password']).exists():
-            qs = User.objects.filter(username=data['username']).filter(password=data['password']).values('id')
-            serialized_qs = json.dumps(list(qs), cls=DjangoJSONEncoder)
-            return JsonResponse(serialized_qs,safe=False)
+            data['id']=re.findall(r'\d+',str(User.objects.filter(username=data['username']).filter(password=data['password']).values('id')))[0]
+            return JsonResponse(data, status=201, safe=False)
         else:
             return HttpResponse(status=403)
-    return HttpResponse("GET requests only!")
+    return HttpResponse(status=404)
+    # if request.method == 'POST':
+    #     data = JSONParser().parse(request)
+    #     # if User.objects.filter(username=data['username']).filter(password=data['password']).exists():
+    #     #     # qs = User.objects.filter(username=data['username']).filter(password=data['password']).values('id')
+    #     #     #serialized_qs = json.dumps(list(qs))
+    #     #     #return JsonResponse(serialized_qs,safe=False)
+    #     else:
+    #         return HttpResponse(status=403)
+    # return HttpResponse("GET requests only!")
 
 
 def home(request):

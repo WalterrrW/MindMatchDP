@@ -2,6 +2,12 @@ from rest_framework import serializers
 from .models import UserProfileDB, UserPersonalityDB, QuestionsDB
 from django.contrib.auth.models import User
 
+class UserSerializerOnlyId(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id'
+        ]
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
