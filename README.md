@@ -19,6 +19,25 @@ Start the server:
 	& python manage.py runserver
 
 The urls are:
+
+    localhost:8000/users/ - GET - returns all users
+    localhost:8000/users/new/ - POST - json format: 
+    {
+        "username":"gica4",
+        "password":"hagihagi@2",
+        "id":""  // blank id must be passed
+    }
+    
+    localhost:8000/users/login/ - GET - json format
+    {
+        "username":"gica4",
+        "password":"hagihagi@2",
+        "id":""
+    }
+    in case of wrong credentials an httpresponse(error403) is issued
+    in case o good credentials we have json response like this:
+    "[{\"id\": 9}]"
+
 	localhost:8000/profile - accepts get request and returns json with all user profiles
 	localhost:8000/profile/new/ - accepts post request to add a new profile
 	localhost:8000/profile/<int:pk>/ (eq. /profile/1) - accept get request and returns a single profile
