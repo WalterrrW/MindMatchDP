@@ -30,7 +30,8 @@ def add_user(request):
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+        #return JsonResponse(serializer.errors, status=400)
+        return HttpResponse(status=404)
     return HttpResponse(status=404)
 
 @csrf_exempt
