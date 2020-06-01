@@ -10,6 +10,13 @@ class UserProfileDB(models.Model):
     def __str__(self):
         return f"{self.userid} - {self.description} - {self.random_fun}"
 
+    @classmethod
+    def create(cls, userid, description, random_fun):
+        user = User.objects.get(id=userid)
+        profile = cls(userid=user, description=description, random_fun=random_fun)
+        profile.save()
+        return profile
+
 
 class UserPersonalityDB(models.Model):
     userid = models.ForeignKey(User, on_delete=models.CASCADE)

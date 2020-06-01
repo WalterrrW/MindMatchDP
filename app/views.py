@@ -30,6 +30,7 @@ def add_user(request):
         serializer = UserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
+            UserProfileDB.create(userid=serializer.data['id'], description='', random_fun= '')
             return JsonResponse(serializer.data, status=201, safe=False)
         return JsonResponse(serializer.errors, status=400)
         #return HttpResponse(status=404)
@@ -111,6 +112,16 @@ def get_one_user_profile(request, pk):
             serializer.save()
             return JsonResponse(serializer.data)
         return JsonResponse(serializer.errors, status=400)
+
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = UserProfileDBSerializer(userProfile, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
+
+    return JsonResponse(status=400, data={"profile": "accepts only get or post or put"})
 
 
 @csrf_exempt
