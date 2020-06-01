@@ -42,7 +42,7 @@ def login_user(request):
         if User.objects.filter(username=data['username']).filter(password=data['password']).exists():
             data['id']=re.findall(r'\d+',str(User.objects.filter(username=data['username']).filter(password=data['password']).values('id')))[0]
             # data['id']=str(request.user.id)
-            return JsonResponse(data['id'], status=201, safe=False)
+            return JsonResponse(data['id'], status=200, safe=False)
         else:
             return HttpResponse(status=403)
     return HttpResponse(status=404)
@@ -95,7 +95,8 @@ def get_one_user_profile(request, pk):
     Retrieve, update or delete a user profile.
     """
     try:
-        userProfile = UserProfileDB.objects.get(pk=pk)
+        userProfile = UserProfileDB.objects.get(userid=pk)
+        print (userProfile)
     except UserProfileDB.DoesNotExist:
         return HttpResponse(status=404)
 
@@ -129,14 +130,22 @@ def get_user_cnp(request, pk):
         List all user profiles, or create a new user profile.
     """
     try:
-        userCNP = UserPersonalityDB.objects.filter(userid=pk)
+        userCNP = UserPersonalityDB.objects.get(userid=pk)
         print(userCNP)
     except UserPersonalityDB.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        serializer = UserPersonalityDBSerializer(userCNP, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        serializer = UserPersonalityDBSerializer(userCNP)
+        return JsonResponse(serializer.data)
+
+    if request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = UserPersonalityDBSerializer(userCNP, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data)
+        return JsonResponse(serializer.errors, status=400)
 
 
 @csrf_exempt
