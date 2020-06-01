@@ -42,7 +42,7 @@ def login_user(request):
         if User.objects.filter(username=data['username']).filter(password=data['password']).exists():
             data['id']=re.findall(r'\d+',str(User.objects.filter(username=data['username']).filter(password=data['password']).values('id')))[0]
             # data['id']=str(request.user.id)
-            return JsonResponse(data['id'], status=200, safe=False)
+            return JsonResponse(data, status=200, safe=False)
         else:
             return HttpResponse(status=403)
     return HttpResponse(status=404)
