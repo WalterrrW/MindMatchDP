@@ -11,9 +11,6 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 import re
 
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
 
 @csrf_exempt
 def get_users(request):
@@ -105,7 +102,7 @@ def get_one_user_profile(request, pk):
         serializer = UserProfileDBSerializer(userProfile)
         return JsonResponse(serializer.data)
 
-    elif request.method == 'PUT':
+    if request.method == 'PUT':
         data = JSONParser().parse(request)
         serializer = UserProfileDBSerializer(userProfile, data=data)
         if serializer.is_valid():
@@ -113,7 +110,7 @@ def get_one_user_profile(request, pk):
             return JsonResponse(serializer.data)
         return JsonResponse(serializer.errors, status=400)
 
-    elif request.method == 'POST':
+    if request.method == 'POST':
         data = JSONParser().parse(request)
         serializer = UserProfileDBSerializer(userProfile, data=data)
         if serializer.is_valid():
@@ -205,6 +202,9 @@ def matching(request, pk):
         matched_list = get_matching_profiles(matched_list)
         print(matched_list)
         serializer = UserProfileDBSerializer(matched_list, many=True)
+        for dict in serializer.data:
+            dict['username'] = User.objects.filter(id=dict['userid']).values('username')[0]['username']
+        print(serializer.data)
         return JsonResponse(serializer.data, safe=False)
     return HttpResponse(status=404)
 
@@ -223,7 +223,7 @@ def get_matching_users_profile(pk, cnp):
             # ---------------- implement algo
             final_order.append((x.userid.id, procent_matched))
     final_order = sorted(final_order, key=lambda x: -x[1])
-    print(final_order)
+    # print(final_order)
     return final_order
 
 
@@ -233,7 +233,7 @@ def get_matching_profiles(matched_list):
 
     for x in matched_list:
         profile = user_profiles.filter(userid=x[0]).first()
-        print(profile)
+        # print(profile)
         matched_profiles.append(profile)
     return matched_profiles
 

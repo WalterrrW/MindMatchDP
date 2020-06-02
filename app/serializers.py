@@ -27,7 +27,6 @@ class UserProfileDBSerializer(serializers.ModelSerializer):
             'random_fun'
         ]
 
-
 class UserPersonalityDBSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserPersonalityDB
