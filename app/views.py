@@ -71,6 +71,8 @@ def get_users_profiles(request):
     if request.method == 'GET':
         userProfiles = UserProfileDB.objects.all()
         serializer = UserProfileDBSerializer(userProfiles, many=True)
+        for dict in serializer.data:
+            dict['username'] = User.objects.filter(id=dict['userid']).values('username')[0]['username']
         return JsonResponse(serializer.data, safe=False)
     return HttpResponse(status=404)
 
