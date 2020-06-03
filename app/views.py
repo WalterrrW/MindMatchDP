@@ -96,13 +96,20 @@ def get_one_user_profile(request, pk):
     """
     try:
         userProfile = UserProfileDB.objects.get(userid=pk)
-        print (userProfile)
+        # print (userProfile)
     except UserProfileDB.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
         serializer = UserProfileDBSerializer(userProfile)
-        return JsonResponse(serializer.data)
+        newdict = {}
+        newdict.__setitem__('userid',serializer.data['userid'])
+        newdict.__setitem__('description', serializer.data['description'])
+        newdict.__setitem__('random_fun', serializer.data['random_fun'])
+        newdict.__setitem__('username', User.objects.filter(id=pk).values('username')[0]['username'])
+
+        print(newdict)
+        return JsonResponse(newdict)
 
     if request.method == 'PUT':
         data = JSONParser().parse(request)
