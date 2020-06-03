@@ -1,6 +1,6 @@
-# MindMatchDP
+# Versiunea cea mai noua e pe branch-ul fix_auth
  
-# Versiunea functionala e ultimul commit de pe branch-ul development sau master
+# MindMatch
  
 Run: & pip install -r requirements.txt
 
