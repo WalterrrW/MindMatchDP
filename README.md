@@ -1,5 +1,5 @@
 # Versiunea cea mai noua e pe branch-ul fix_auth
- 
+# github for chat server: https://github.com/MihaiBorsu/DPChat
 # MindMatch
  
 Run: & pip install -r requirements.txt
